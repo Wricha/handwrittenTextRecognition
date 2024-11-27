@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Extractor</title>
+</head>
+<body>
+    <h1>Upload an Image to Extract Text</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                resultDiv.textContent = "Please select a file.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            resultDiv.textContent = "Processing...";
+
+            try {
+                const response = await fetch("/", {
+                    method: "POST",
+                    body: formData,
+                });
+                const data = await response.json();
+                if (data.error) {
+                    resultDiv.textContent = `Error: ${data.error}`;
+                } else {
+                    resultDiv.textContent = `Extracted Text: ${data.extracted_text}`;
+                }
+            } catch (error) {
+                resultDiv.textContent = "An error occurred while processing the image.";
+            }
+        });
+    </script>
+</body>
+</html>
