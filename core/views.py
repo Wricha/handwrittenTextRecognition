@@ -9,7 +9,7 @@ import os
 import io
 
 # Load your CNN model
-model_path = "C:\\Users\\DELL\\prescriptionRecognition\\handwritten_text_50.keras" # Update with your CNN model path
+model_path = "C:\Users\DELL\prescriptionRecognition\handwritten_text_1.keras"
 cnn_model = load_model(model_path)
 
 # Define a function to preprocess the image
@@ -23,24 +23,23 @@ def preprocess_image(image):
     image_array = np.array(image) / 255.0
     image_array = np.expand_dims(image_array, axis=-1)
     
-    image_array = np.expand_dims(image_array, axis=0)  # Add batch and channel dimensions
+    image_array = np.expand_dims(image_array, axis=0)  
     return image_array
 
-# Define a function to decode the CNN model predictions
+
 def decode_predictions(predictions):
     """
     Convert the model's output into readable text.
     The decoding logic depends on your specific model setup.
     For example, if your model uses an index-to-character mapping, implement it here.
     """
-    # Placeholder: Replace with actual decoding logic
+    
     characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     max_index = len(characters) - 1
     
-    # Convert predictions to readable text
     output = ""
-    for pred in np.argmax(predictions, axis=2)[0]:  # Assuming predictions shape (1, seq_len, num_classes)
-        if pred <= max_index:  # Check to avoid out-of-range index
+    for pred in np.argmax(predictions, axis=2)[0]:  
+        if pred <= max_index:  
             output += characters[pred]
         else:
             output += "?"
